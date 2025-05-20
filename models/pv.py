@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 import numpy as np
 
+
 @dataclass
 class PVSystem:
     """
@@ -9,16 +10,17 @@ class PVSystem:
     Attributen:
         irradiance (np.ndarray): Zoninstraling [kWh/m²] per tijdstap.
         temperature (np.ndarray): Temperatuur [°C] per tijdstap.
-        area (float): Oppervlak van PV-panelen in m².
-        efficiency (float): Paneelrendement (typisch ~0.18).
-
-    Methoden:
-        power_output(): Retourneert array met PV-vermogen per tijdstap [kW].
+        panel_area (float): Oppervlakte van één zonnepaneel in m² (standaard 1.65).
+        panel_wp (float): Wattpiek van één zonnepaneel in Wp (standaard 450).
+        n_pvpanels (int): Aantal zonnepanelen (standaard 6).
+        max_irradiance (float): Maximale zoninstraling in W/m² (standaard 1000).
     """
     irradiance: np.ndarray
     temperature: np.ndarray
-    area: float = 10.0
-    efficiency: float = 0.18
+    panel_area: float = 1.65  # Oppervlakte van één paneel in m²
+    panel_wp: float = 400.0   # Wattpiek per paneel
+    n_pvpanels: int = 4       # Aantal panelen
+    max_irradiance: float = 1000.0  # Maximale zoninstraling in W/m²
 
     def power_output(self) -> np.ndarray:
         """
@@ -27,5 +29,5 @@ class PVSystem:
         Returns:
             np.ndarray: Vermogen in kW per tijdstap.
         """
-        temp_corr = 1 - 0.005 * (self.temperature - 25)
-        return self.efficiency * self.irradiance * self.area * temp_corr
+        return self.n_pvpanels * self.panel_area * (self.panel_wp / 1000) * self.irradiance * (1 - 0.005 * (self.temperature - 25))
+        # resultaat in kW

@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 import numpy as np
 
+
 @dataclass
 class MPCInputData:
     """
@@ -13,7 +14,7 @@ class MPCInputData:
         soc_init (float): Startwaarde van de batterij-SOC.
     """
     P_load: np.ndarray
-    P_pv: np.ndarray
+    P_pv_available: np.ndarray
     price: np.ndarray
     soc_init: float
 
